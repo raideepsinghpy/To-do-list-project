@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <title>To Do List</title>
+</head>
+<body>
+  <div id="todo-container">
+    <div id="header">
+      <h1>To Do List :)</h1>
+    </div>
+    <div id="input-row">
+      <input id="addtask" placeholder="Add a new task" />
+      <button id="submit" onclick="addtask()">Add</button>
+    </div>
+    <h2>Task List:</h2>
+    <ul id="list"></ul>
+    <div id="counters">Completed: <span id="comp-count">0</span> | Uncompleted: <span id="uncom-count">0</span></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
