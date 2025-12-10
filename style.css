@@ -11,23 +11,16 @@ body {
   margin-top: 50px;
 }
 #todo-container {
-  background: rgb(41, 33, 33);
-  width: 90%;
-  margin: 0 auto;
-  border: 2px solid #0033ff;
-  padding: 20px;
-  color: rgb(255, 4, 4);
-  border-radius: 15px;
-}
-#todo-container {
   background: rgb(42, 1, 48);
-  width: 400px;
+  width: 90%;
+  max-width: 400px;
   margin: 0 auto;
-  border: 1cap solid #431d9c;
+  border: 2px solid #fdfdfd;
   padding: 20px;
   color: white;
   border-radius: 15px;
 }
+
 #header {
   margin: 5px;
   font-size: 20px;
@@ -101,3 +94,4 @@ p{
   opacity: 0.6;
   font-size: 13px;
 }
+* { box-sizing: border-box; }
