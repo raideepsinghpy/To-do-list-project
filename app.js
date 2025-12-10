@@ -12,7 +12,7 @@ function updateCounters() {
 
 function addtask() {
   const task = inputBox.value.trim();
-  if (!task) return alert("No task:/ ?");
+  if (!task) return alert("No task? Add one!");
   const li = document.createElement("li");
 
   const label = document.createElement("label");
@@ -49,6 +49,7 @@ function addtask() {
   });
 
   dlt.addEventListener("click", function () {
+    if(!confirm("Delete this task?")) return;
     li.remove();
     updateCounters();
   });
