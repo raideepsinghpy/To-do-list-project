@@ -1,3 +1,4 @@
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 const inputBox = document.getElementById("addtask");
 const listContainer = document.getElementById("list");
 const completedCounter = document.getElementById("comp-count");
@@ -13,60 +14,83 @@ function updateCounters() {
 function addtask() {
   const task = inputBox.value.trim();
   if (!task) return alert("No task? Add one!");
-  const li = document.createElement("li");
 
-  const label = document.createElement("label");
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  const span = document.createElement("span");
-  span.textContent = task;
-  label.appendChild(checkbox);
-  label.appendChild(span);
+  tasks.push({
+    text: task,
+    completed: false
+  });
 
-  const editBtn = document.createElement("button");
-  editBtn.className = "edit-btn";
-  editBtn.textContent = "Edit";
-
-  const deleteBtn = document.createElement("button");
-  deleteBtn.className = "delete-btn";
-  deleteBtn.textContent = "Delete";
-
-  li.appendChild(label);
-  li.appendChild(editBtn);
-  li.appendChild(deleteBtn);
-  listContainer.appendChild(li);
+  saveTasks();
   inputBox.value = "";
   inputBox.focus();
+  renderTasks();
+}
 
-  const ebtn = li.querySelector(".edit-btn");
-  const checkboxx = li.querySelector("input[type='checkbox']");
-  const dlt = li.querySelector(".delete-btn");
-  const taskspan = li.querySelector("label span");
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+function renderTasks() {
+  listContainer.innerHTML = "";
 
-  checkboxx.addEventListener("change", function () {
-    li.classList.toggle("completed", checkboxx.checked);
-    updateCounters();
-  });
+  tasks.forEach((taskObj, index) => {
+    const li = document.createElement("li");
+    if (taskObj.completed) li.classList.add("completed");
 
-  dlt.addEventListener("click", function () {
-    if(!confirm("Delete this task?")) return;
-    li.remove();
-    updateCounters();
-  });
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = taskObj.completed;
 
-  ebtn.addEventListener("click", function () {
-    const updated = prompt("Edit task:", taskspan.textContent);
-    if (updated === null) return;
-    const trimmed = updated.trim();
-    if (!trimmed) return alert("Task can't be empty.");
-    taskspan.textContent = trimmed;
-    li.classList.remove("completed");
-    checkboxx.checked = false;
-    updateCounters();
+    const span = document.createElement("span");
+    span.textContent = taskObj.text;
+
+    label.appendChild(checkbox);
+    label.appendChild(span);
+
+    const editBtn = document.createElement("button");
+    editBtn.className = "edit-btn";
+    editBtn.textContent = "Edit";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.textContent = "Delete";
+
+    li.appendChild(label);
+    li.appendChild(editBtn);
+    li.appendChild(deleteBtn);
+    listContainer.appendChild(li);
+
+    checkbox.addEventListener("change", () => {
+      taskObj.completed = checkbox.checked;
+      li.classList.toggle("completed");
+      saveTasks();
+      updateCounters();
+    });
+
+    deleteBtn.addEventListener("click", () => {
+      if (!confirm("Delete this task?")) return;
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    });
+
+    editBtn.addEventListener("click", () => {
+      const updated = prompt("Edit task:", taskObj.text);
+      if (updated === null) return;
+      const trimmed = updated.trim();
+      if (!trimmed) return alert("Task can't be empty.");
+      taskObj.text = trimmed;
+      taskObj.completed = false;
+      saveTasks();
+      renderTasks();
+    });
   });
 
   updateCounters();
 }
+window.addEventListener("DOMContentLoaded", () => {
+  renderTasks();
+});
 
 inputBox.addEventListener("keydown", (e) => {
   if (e.key === "Enter") addtask();
